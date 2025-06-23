@@ -1,0 +1,32 @@
+:name: OpenAWELC Board
+:description: This script runs Alienware M18 R2 STM32L412CBT6.
+
+using sysbus
+$name?="openawelc"
+mach create $name
+machine LoadPlatformDescription @platforms/boards/m18r2.repl
+
+#cpu PerformanceInMips 125
+
+showAnalyzer sysbus.usart1
+
+### Set random board UNIQUE ID ###
+
+python "import _random"
+python "rand = _random.Random()"
+
+$id1 = `python "print rand.getrandbits(32)"`
+$id2 = `python "print rand.getrandbits(32)"`
+$id3 = `python "print rand.getrandbits(32)"`
+macro reset
+"""
+    sysbus LoadBinary @loop.bin 0x08000000
+    sysbus WriteDoubleWord 0xE000ED08 0x8000000
+
+    sysbus WriteDoubleWord 0x1FFF7590 $id1
+    sysbus WriteDoubleWord 0x1FFF7594 $id2
+    sysbus WriteDoubleWord 0x1FFF7598 $id3
+"""
+
+runMacro $reset
+machine StartGdbServer 3333 true
