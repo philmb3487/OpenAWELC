@@ -12,7 +12,7 @@ echo dfu >  /sys/kernel/alienware_elc_dfu/mode
 Then you can use STM32CubeProgrammer to program the chip as usual. Open the file, select 'USB' in the interface, and click 'Download'. Booting the chip is also strightforward.
 
 ```bash
-echo dfu >  /sys/kernel/alienware_elc_dfu/mode
+echo run >  /sys/kernel/alienware_elc_dfu/mode
 ```
 
 # Customising colors
